@@ -1,6 +1,6 @@
 // =========================================================
 //  FA LOGISTICS — App Logic
-//  Features: CSV loading, search, filters, cart with qty,
+//  Features: JSON product loading, search, filters, cart with qty,
 //            checkout via WhatsApp, infinite scroll,
 //            shareable links, URL-persisted filters
 // =========================================================
@@ -97,12 +97,12 @@ async function loadProducts(retryCount = 0) {
   try {
     grid.innerHTML = '<div class="loading" role="status" aria-live="polite">Loading products…</div>';
 
-    const response = await fetch(`products.csv?v=${Date.now()}`, { cache: 'no-store' });
+    const response = await fetch(`products.json?v=${Date.now()}`, { cache: 'no-store' });
 
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
-    const csvText = await response.text();
-    allProducts = parseCSV(csvText);
+    const jsonData = await response.json();
+    allProducts = parseJSON(jsonData);
     allProducts = prioritizeProducts(allProducts);
 
     filteredProducts = [...allProducts];
@@ -264,6 +264,53 @@ function parseCSV(text) {
         sameDay: isSameDay
       });
     }
+  }
+
+  return products;
+}
+
+// Parse JSON product data (faster than CSV parsing)
+function parseJSON(jsonData) {
+  const products = [];
+  let productId = 1;
+
+  for (const row of jsonData) {
+    const name = (row.name || '').replace(/\n/g, ' ').trim();
+    const description = (row.description || '').replace(/\n/g, ' ').trim();
+    const finalPrice = (row.final_price || '').trim();
+    const variantsPrices = (row.variants_final_prices || '').trim();
+    const imageUrl = (row.image || '').trim();
+    const sameDayStr = (row.sameDay || '').trim().toLowerCase();
+
+    const variants = parseVariants(variantsPrices);
+
+    let displayPrice = finalPrice;
+    let displayPriceValue = parsePriceValue(displayPrice);
+
+    if (!displayPrice && variants.length > 0) {
+      const sorted = [...variants].sort((a, b) => a.priceValue - b.priceValue);
+      displayPrice = sorted[0].price;
+      displayPriceValue = sorted[0].priceValue;
+    }
+
+    if (!displayPrice) continue;
+
+    const descClean = description && description !== 'No description' ? description : '';
+    const isSameDay = sameDayStr === 'true';
+
+    products.push({
+      id: productId++,
+      productId: (row.product_id || '').trim(),
+      name: name,
+      description: descClean,
+      price: displayPrice,
+      priceValue: displayPriceValue,
+      variants: variants,
+      category: categorizeProduct(name),
+      emoji: getProductIcon(name),
+      imageUrl: imageUrl,
+      sameDay: isSameDay
+    });
   }
 
   return products;
