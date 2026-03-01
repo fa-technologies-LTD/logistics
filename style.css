@@ -413,6 +413,9 @@ body.no-scroll {
 
 .filter-pill {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 8px 16px;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--border);
@@ -704,19 +707,26 @@ body.no-scroll {
 
 .retry-btn {
   padding: 12px 28px;
-  background: #CADB2E;
-  border: 1px solid rgba(202,219,46,0.40);
+  background: transparent;
+  border: 1.5px solid #05D471;
   border-radius: 999px;
   font-weight: 600;
   font-size: 14px;
-  color: #07090C;
+  color: #05D471;
   cursor: pointer;
-  transition: 180ms ease;
-  box-shadow: var(--glow-primary);
+  transition: background 160ms ease, color 160ms ease, transform 160ms ease;
 }
 
 .retry-btn:hover {
+  background: rgba(5,212,113,0.08);
   transform: translateY(-2px);
+}
+
+.retry-btn:active {
+  background: #05D471;
+  color: #07090C;
+  transform: translateY(1px);
+  transition-duration: 80ms;
 }
 
 /* Modal for Variant Selection */
@@ -846,21 +856,22 @@ body.no-scroll {
 }
 
 .btn-order {
-  background: #CADB2E;
-  border-color: rgba(202,219,46,0.40);
+  background: #05D471;
+  border-color: rgba(5,212,113,0.40);
   color: #07090C;
   box-shadow: var(--glow-primary);
 }
 
 .btn-order:hover {
-  background: #d9ea3a;
+  background: #07f07e;
   transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 0 0 1px rgba(202,219,46,0.28), 0 14px 36px rgba(202,219,46,0.28);
+  box-shadow: 0 0 0 1px rgba(5,212,113,0.28), 0 14px 36px rgba(5,212,113,0.20);
 }
 
 .btn-order:active {
+  background: #03b85e;
   transform: translateY(1px) scale(0.97);
-  box-shadow: 0 0 0 1px rgba(202,219,46,0.14), 0 2px 8px rgba(202,219,46,0.10);
+  box-shadow: 0 0 0 1px rgba(5,212,113,0.14), 0 2px 8px rgba(5,212,113,0.10);
   transition-duration: 80ms;
 }
 
@@ -1129,15 +1140,22 @@ body.no-scroll {
 }
 
 .btn-checkout {
-  background: #CADB2E;
-  border: 1px solid rgba(202,219,46,0.40);
+  background: #05D471;
+  border: 1px solid rgba(5,212,113,0.40);
   color: #07090C;
   box-shadow: var(--glow-primary);
 }
 
 .btn-checkout:hover {
-  background: #d9ea3a;
+  background: #07f07e;
   transform: translateY(-2px);
+  box-shadow: 0 0 0 1px rgba(5,212,113,0.28), 0 10px 28px rgba(5,212,113,0.18);
+}
+
+.btn-checkout:active {
+  background: #03b85e;
+  transform: translateY(1px);
+  transition-duration: 80ms;
 }
 
 .btn-checkout:disabled {
@@ -1285,20 +1303,21 @@ body.no-scroll {
 }
 
 .hero-btn-primary {
-  background: #CADB2E;
+  background: #05D471;
   color: #07090C;
   font-weight: 700;
 }
 
 .hero-btn-primary:hover {
   transform: translateY(-4px) scale(1.02);
-  background: #d9ea3a;
-  box-shadow: 0 10px 32px rgba(202, 219, 46, 0.40);
+  background: #07f07e;
+  box-shadow: 0 10px 32px rgba(5, 212, 113, 0.35);
 }
 
 .hero-btn-primary:active {
+  background: #03b85e;
   transform: translateY(1px) scale(0.97);
-  box-shadow: 0 2px 8px rgba(202, 219, 46, 0.20);
+  box-shadow: 0 2px 8px rgba(5, 212, 113, 0.20);
   transition-duration: 80ms;
 }
 
@@ -1379,6 +1398,9 @@ body.no-scroll {
 
 .category-pill {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
   padding: 6px 12px;
   background: rgba(255,255,255,0.04);
   border: 1px solid var(--border);
