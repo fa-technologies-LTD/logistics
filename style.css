@@ -1321,10 +1321,33 @@ body.no-scroll {
   transition-duration: 80ms;
 }
 
+@keyframes fa-shimmer-sweep {
+  0%   { transform: translateX(-100%) skewX(-15deg); opacity: 0; }
+  8%   { opacity: 1; }
+  92%  { opacity: 1; }
+  100% { transform: translateX(300%) skewX(-15deg); opacity: 0; }
+}
+@keyframes fa-btn-glow {
+  0%, 100% { box-shadow: 0 0 0px 0 rgba(5,212,113,0); }
+  50%       { box-shadow: 0 0 22px 0px rgba(5,212,113,0.18); }
+}
+
 .hero-btn-secondary {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
   border: 2px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  overflow: hidden;
+  animation: fa-btn-glow 3.5s ease-in-out infinite;
+}
+.hero-btn-secondary::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 35%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(5,212,113,0.10), transparent);
+  animation: fa-shimmer-sweep 3.5s ease-in-out infinite;
 }
 
 .hero-btn-secondary:hover {
