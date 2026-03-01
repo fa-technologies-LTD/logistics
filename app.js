@@ -91,11 +91,32 @@ try {
 //  DATA LOADING & PARSING
 // =========================================================
 
+/** Returns the energy-ring loading spinner HTML */
+function loadingHTML(msg = 'Loading products…') {
+  return `
+  <div class="fa-loader" role="status" aria-live="polite">
+    <div class="fa-loader__orbit">
+      <img src="assets/fa-mark-white-transparent.png" class="fa-loader__mark" alt="" width="52" height="52">
+      <svg class="fa-loader__svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="fa-glow" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="3" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+        <circle cx="60" cy="60" r="52" stroke="#3A7B6F" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="55 271.73" class="fa-ring-tail"/>
+        <circle cx="60" cy="60" r="52" stroke="#05D471" stroke-width="3" stroke-linecap="round" stroke-dasharray="20 306.73" class="fa-ring-head" filter="url(#fa-glow)"/>
+      </svg>
+    </div>
+    <span class="fa-loader__text">${msg}</span>
+  </div>`;
+}
+
 async function loadProducts(retryCount = 0) {
   const grid = document.getElementById('productsGrid');
 
   try {
-    grid.innerHTML = '<div class="loading" role="status" aria-live="polite">Loading products…</div>';
+    grid.innerHTML = loadingHTML();
 
     const response = await fetch(`products.json?v=${Date.now()}`, { cache: 'no-store' });
 
@@ -119,7 +140,7 @@ async function loadProducts(retryCount = 0) {
     if (retryCount < MAX_RETRIES) {
       // Auto-retry with back-off
       const delay = (retryCount + 1) * 2000;
-      grid.innerHTML = `<div class="loading" role="status" aria-live="polite">Loading failed — retrying in ${delay / 1000}s…</div>`;
+      grid.innerHTML = loadingHTML(`Loading failed — retrying in ${delay / 1000}s…`);
       setTimeout(() => loadProducts(retryCount + 1), delay);
     } else {
       // Show error state with retry button
