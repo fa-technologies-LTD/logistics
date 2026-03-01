@@ -43,19 +43,15 @@
   --text-muted: rgba(255, 255, 255, 0.68);
   --text-dim: rgba(255, 255, 255, 0.55);
   
-  /* FA Logistics Gold Tokens */
-  --fa-gold-700: #A67A16;
-  --fa-gold-600: #C9921A;
-  --fa-gold-400: #D4A017;
-
-  --primary: #C9921A;
-  --primary-strong: #A67A16;
+  /* FA Primary Tokens (green — gold retired) */
+  --primary: #05D471;
+  --primary-strong: #25B570;
   --link: var(--fa-blue-300);
-  --focus: rgba(201, 146, 26, 0.35);
+  --focus: rgba(5, 212, 113, 0.25);
   
   --shadow-1: 0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-2: 0 14px 40px rgba(0, 0, 0, 0.50);
-  --glow-primary: 0 0 0 1px rgba(201, 146, 26, 0.22), 0 10px 40px rgba(201, 146, 26, 0.10);
+  --glow-primary: 0 0 0 1px rgba(5, 212, 113, 0.20), 0 10px 40px rgba(5, 212, 113, 0.08);
   
   --r-xs: 10px;
   --r-sm: 14px;
@@ -293,7 +289,7 @@ body.no-scroll {
   display: grid;
   place-items: center;
   padding: 0 5px;
-  box-shadow: 0 2px 8px rgba(201,146,26,0.4);
+  box-shadow: 0 2px 8px rgba(5,212,113,0.4);
 }
 
 /* Filter Pills */
@@ -569,7 +565,7 @@ body.no-scroll {
 .product-price {
   font-size: 16px;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--text);
   margin-bottom: 10px;
 }
 
@@ -582,28 +578,29 @@ body.no-scroll {
 .order-btn {
   width: 100%;
   padding: 10px;
-  background: #CADB2E;
-  border: 1px solid rgba(202,219,46,0.40);
+  background: transparent;
+  border: 1.5px solid #05D471;
   border-radius: 999px;
   font-weight: 600;
   font-size: 13px;
-  color: #07090C;
+  color: #05D471;
   cursor: pointer;
-  transition: background 160ms ease, transform 160ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 160ms ease;
-  box-shadow: var(--glow-primary);
+  transition: background 160ms ease, color 160ms ease, transform 160ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 160ms ease;
   position: relative;
   overflow: hidden;
 }
 
 .order-btn:hover {
-  background: #d9ea3a;
+  background: rgba(5,212,113,0.08);
   transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 0 0 1px rgba(202,219,46,0.28), 0 14px 36px rgba(202,219,46,0.28);
+  box-shadow: 0 0 0 1px rgba(5,212,113,0.22), 0 14px 36px rgba(5,212,113,0.12);
 }
 
 .order-btn:active {
+  background: #05D471;
+  color: #07090C;
   transform: translateY(1px) scale(0.97);
-  box-shadow: 0 0 0 1px rgba(202,219,46,0.18), 0 2px 8px rgba(202,219,46,0.12);
+  box-shadow: 0 0 0 1px rgba(5,212,113,0.3), 0 2px 8px rgba(5,212,113,0.2);
   transition-duration: 80ms;
 }
 
