@@ -610,11 +610,14 @@ function updateCartUI() {
   const cartCount = document.getElementById('cartCount');
   const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
 
+  const cartWrapper = document.getElementById('cartIconBtn');
   if (totalItems > 0) {
     cartCount.textContent = totalItems;
     cartCount.style.display = 'grid';
+    if (cartWrapper) cartWrapper.classList.add('has-items');
   } else {
     cartCount.style.display = 'none';
+    if (cartWrapper) cartWrapper.classList.remove('has-items');
   }
 }
 
@@ -1379,11 +1382,6 @@ let ticking = false;
 function handleScroll() {
   const scrollY = window.scrollY;
   const heroHeight = heroSection ? heroSection.offsetHeight : 0;
-
-  if (heroSection && scrollY < heroHeight) {
-    heroSection.style.transform = `translateY(${scrollY * 0.5}px)`;
-    heroSection.style.opacity = 1 - (scrollY / heroHeight) * 0.7;
-  }
 
   const backToTop = document.getElementById('backToTop');
   if (backToTop) {

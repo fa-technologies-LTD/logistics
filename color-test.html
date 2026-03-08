@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FA Logistics — Color Options Test</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #07090C;
+  --bg-elev-1: #0B0F12;
+  --bg-elev-2: #0F141B;
+  --surface:   rgba(255,255,255,0.04);
+  --border:    rgba(255,255,255,0.10);
+  --border-2:  rgba(255,255,255,0.14);
+  --text:      rgba(255,255,255,0.92);
+  --text-muted:rgba(255,255,255,0.68);
+  --text-dim:  rgba(255,255,255,0.50);
+
+  /* brand tokens */
+  --green:  #05D471;
+  --lime:   #CADB2E;
+  --gold:   #C9921A;
+  --blue:   #696DFA;
+
+  --font-head: "DM Sans", system-ui, sans-serif;
+  --font-body: "Open Sans", system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 40px 20px 80px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1 {
+  font-family: var(--font-head);
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+.subtitle {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 48px;
+}
+.subtitle span {
+  color: var(--green);
+}
+
+/* ── Section label ── */
+.section {
+  margin-bottom: 56px;
+}
+.section-label {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+.section-label h2 {
+  font-family: var(--font-head);
+  font-size: 15px;
+  font-weight: 700;
+}
+.section-label .tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.tag-current  { background: rgba(201,146,26,0.15); color: var(--gold); border: 1px solid rgba(201,146,26,0.3); }
+.tag-option   { background: rgba(5,212,113,0.12);  color: var(--green); border: 1px solid rgba(5,212,113,0.25); }
+.tag-bonus    { background: rgba(105,109,250,0.12); color: var(--blue);  border: 1px solid rgba(105,109,250,0.25); }
+.section-label .desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-left: auto;
+}
+
+/* ── Grid ── */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+  gap: 14px;
+}
+
+/* ── Base card ── */
+.card {
+  background: var(--bg-elev-1);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.4);
+}
+
+/* image slot */
+.card-img {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--bg-elev-2);
+  display: grid;
+  place-items: center;
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+.card-img svg.product-icon {
+  width: 56px; height: 56px;
+  opacity: 0.55;
+}
+
+/* badges */
+.badge {
+  position: absolute;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.badge-value  { top: 7px;  right: 7px; background: rgba(5,212,113,0.95); color: #07090C; }
+.badge-sameday{ bottom: 7px; left: 7px; background: rgba(105,109,250,0.9); color: #fff; font-size: 8px; }
+
+/* info */
+.card-info { padding: 11px 11px 13px; flex: 1; display: flex; flex-direction: column; }
+.card-name {
+  font-family: var(--font-head);
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-bottom: 7px;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 34px;
+}
+.card-variants {
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: 9px;
+}
+.card-price {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  margin-top: auto;
+}
+
+/* ── BUTTON VARIANTS ── */
+
+/* --- A: CURRENT — Lime filled always --- */
+.btn-a {
+  width: 100%;
+  padding: 9px;
+  background: #CADB2E;
+  border: 1px solid rgba(202,219,46,0.4);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #07090C;
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 160ms ease;
+  box-shadow: 0 0 0 1px rgba(202,219,46,0.18), 0 8px 24px rgba(202,219,46,0.12);
+}
+.btn-a:hover  { background: #d9ea3a; transform: translateY(-2px) scale(1.01); box-shadow: 0 0 0 1px rgba(202,219,46,0.28), 0 12px 28px rgba(202,219,46,0.22); }
+.btn-a:active { background: #b8c628; transform: translateY(1px) scale(0.97); transition-duration: 80ms; }
+
+/* --- B: Ghost green default → solid on :active --- */
+.btn-b {
+  width: 100%;
+  padding: 9px;
+  background: transparent;
+  border: 1.5px solid #05D471;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #05D471;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, transform 160ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 160ms ease;
+}
+.btn-b:hover  { background: rgba(5,212,113,0.08); transform: translateY(-2px) scale(1.01); box-shadow: 0 0 0 1px rgba(5,212,113,0.2), 0 10px 24px rgba(5,212,113,0.12); }
+.btn-b:active { background: #05D471; color: #07090C; transform: translateY(1px) scale(0.97); transition-duration: 80ms; }
+
+/* --- C: Ghost lime default → solid lime on :active --- */
+.btn-c {
+  width: 100%;
+  padding: 9px;
+  background: transparent;
+  border: 1.5px solid #CADB2E;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #CADB2E;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, transform 160ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 160ms ease;
+}
+.btn-c:hover  { background: rgba(202,219,46,0.08); transform: translateY(-2px) scale(1.01); box-shadow: 0 0 0 1px rgba(202,219,46,0.2), 0 10px 24px rgba(202,219,46,0.12); }
+.btn-c:active { background: #CADB2E; color: #07090C; transform: translateY(1px) scale(0.97); transition-duration: 80ms; }
+
+/* --- D: Solid green always (no lime at all) --- */
+.btn-d {
+  width: 100%;
+  padding: 9px;
+  background: #05D471;
+  border: 1px solid rgba(5,212,113,0.4);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+  color: #07090C;
+  cursor: pointer;
+  transition: background 160ms ease, transform 160ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 160ms ease;
+  box-shadow: 0 0 0 1px rgba(5,212,113,0.18), 0 8px 24px rgba(5,212,113,0.12);
+}
+.btn-d:hover  { background: #07f07e; transform: translateY(-2px) scale(1.01); box-shadow: 0 0 0 1px rgba(5,212,113,0.28), 0 12px 28px rgba(5,212,113,0.22); }
+.btn-d:active { background: #03b85e; transform: translateY(1px) scale(0.97); transition-duration: 80ms; }
+
+/* --- E: Ghost white → solid white text on :active --- */
+.btn-e {
+  width: 100%;
+  padding: 9px;
+  background: transparent;
+  border: 1.5px solid rgba(255,255,255,0.25);
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 12px;
+  color: rgba(255,255,255,0.75);
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease, transform 160ms cubic-bezier(0.34,1.56,0.64,1), box-shadow 160ms ease;
+}
+.btn-e:hover  { border-color: rgba(255,255,255,0.45); color: rgba(255,255,255,0.92); transform: translateY(-2px) scale(1.01); }
+.btn-e:active { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.55); transform: translateY(1px) scale(0.97); transition-duration: 80ms; }
+
+/* ── PRICE VARIANTS ── */
+.price-gold  { color: #C9921A; }
+.price-white { color: rgba(255,255,255,0.92); }
+.price-green { color: #05D471; }
+.price-lime  { color: #CADB2E; }
+
+/* ── State indicator strip ─ shows default / hover note ── */
+.state-hint {
+  font-size: 10px;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: 8px;
+  letter-spacing: 0.02em;
+}
+.state-hint code {
+  font-family: monospace;
+  font-size: 9.5px;
+  background: rgba(255,255,255,0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+  color: var(--text-muted);
+}
+
+/* ── Comparison strip ── */
+.compare-note {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 16px;
+  line-height: 1.7;
+}
+.compare-note strong { color: var(--text); }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<h1>FA Logistics — Color Options</h1>
+<p class="subtitle">Hover &amp; click each button to feel the interaction. <span>Active state = button fill.</span></p>
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<!-- SECTION 1 — CURRENT STATE                                    -->
+<!-- ═════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">
+    <h2>1 — Current (live today)</h2>
+    <span class="tag tag-current">LIVE</span>
+    <span class="desc">Gold price · Lime filled button always</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-img">
+        <!-- phone icon -->
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1"/></svg>
+        <span class="badge badge-value">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Best Value
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">iPhone 15 Pro Max 256GB</div>
+        <div class="card-variants">3 variants available</div>
+        <div class="card-price price-gold">₦1,250,000</div>
+        <button class="btn-a">Order Now</button>
+        <div class="state-hint">Default: filled lime</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <!-- shoes icon -->
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14c0 0 2-1 5-1s5.5 2 9 2 4-1 4-1v3s-1 1-4 1-6-2-9-2-5 1-5 1v-3z"/><path d="M3 14l2-6h4l2 4"/></svg>
+        <span class="badge badge-sameday">
+          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Same Day
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Nike Air Max 270</div>
+        <div class="card-variants">Sizes 38–46</div>
+        <div class="card-price price-gold">₦85,000</div>
+        <button class="btn-a">Order Now</button>
+        <div class="state-hint">Default: filled lime</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Luxury Perfume Set — Versace Eros</div>
+        <div class="card-variants">100ml · 200ml</div>
+        <div class="card-price price-gold">₦45,000</div>
+        <button class="btn-a">Order Now</button>
+        <div class="state-hint">Default: filled lime</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="compare-note">
+    <strong>What you have:</strong> Gold/amber price (#C9921A) reads muddy on dark cards. Lime button is always fully filled — it's loud by default and doesn't change state clearly on click.
+  </div>
+</div>
+
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<!-- SECTION 2 — YOUR PROPOSED DIRECTION                          -->
+<!-- ═════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">
+    <h2>2 — White price · Green ghost → solid on click</h2>
+    <span class="tag tag-option">OPTION A</span>
+    <span class="desc">White price · Neon green border default · fills #05D471 on click</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1"/></svg>
+        <span class="badge badge-value">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Best Value
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">iPhone 15 Pro Max 256GB</div>
+        <div class="card-variants">3 variants available</div>
+        <div class="card-price price-white">₦1,250,000</div>
+        <button class="btn-b">Order Now</button>
+        <div class="state-hint">Default: border · <strong style="color:#05D471">click</strong> to fill</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14c0 0 2-1 5-1s5.5 2 9 2 4-1 4-1v3s-1 1-4 1-6-2-9-2-5 1-5 1v-3z"/><path d="M3 14l2-6h4l2 4"/></svg>
+        <span class="badge badge-sameday">
+          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Same Day
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Nike Air Max 270</div>
+        <div class="card-variants">Sizes 38–46</div>
+        <div class="card-price price-white">₦85,000</div>
+        <button class="btn-b">Order Now</button>
+        <div class="state-hint">Default: border · <strong style="color:#05D471">click</strong> to fill</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Luxury Perfume Set — Versace Eros</div>
+        <div class="card-variants">100ml · 200ml</div>
+        <div class="card-price price-white">₦45,000</div>
+        <button class="btn-b">Order Now</button>
+        <div class="state-hint">Default: border · <strong style="color:#05D471">click</strong> to fill</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="compare-note">
+    <strong>Option A:</strong> Price disappears from color hierarchy — white blends with product name. But clean. Green ghost button is elegant and the fill-on-click is a clear interaction signal. Matches the energy ring head color exactly.
+  </div>
+</div>
+
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<!-- SECTION 3 — GREEN PRICE + GREEN GHOST BTN                    -->
+<!-- ═════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">
+    <h2>3 — Green price · Green ghost → solid on click</h2>
+    <span class="tag tag-option">OPTION B</span>
+    <span class="desc">Price = #05D471 · Same ghost→solid button as Option A</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1"/></svg>
+        <span class="badge badge-value">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Best Value
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">iPhone 15 Pro Max 256GB</div>
+        <div class="card-variants">3 variants available</div>
+        <div class="card-price price-green">₦1,250,000</div>
+        <button class="btn-b">Order Now</button>
+        <div class="state-hint">Default: border · <strong style="color:#05D471">click</strong> to fill</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14c0 0 2-1 5-1s5.5 2 9 2 4-1 4-1v3s-1 1-4 1-6-2-9-2-5 1-5 1v-3z"/><path d="M3 14l2-6h4l2 4"/></svg>
+        <span class="badge badge-sameday">
+          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Same Day
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Nike Air Max 270</div>
+        <div class="card-variants">Sizes 38–46</div>
+        <div class="card-price price-green">₦85,000</div>
+        <button class="btn-b">Order Now</button>
+        <div class="state-hint">Default: border · <strong style="color:#05D471">click</strong> to fill</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Luxury Perfume Set — Versace Eros</div>
+        <div class="card-variants">100ml · 200ml</div>
+        <div class="card-price price-green">₦45,000</div>
+        <button class="btn-b">Order Now</button>
+        <div class="state-hint">Default: border · <strong style="color:#05D471">click</strong> to fill</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="compare-note">
+    <strong>Option B:</strong> Price and button are the same green — price = action = same energy. Very cohesive. Downside: two adjacent greens (price + button outline) compete slightly. Works if you read price as "the green number you're about to pay" rather than content.
+  </div>
+</div>
+
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<!-- SECTION 4 — LIME GHOST BTN                                   -->
+<!-- ═════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">
+    <h2>4 — White price · Lime ghost → solid lime on click</h2>
+    <span class="tag tag-option">OPTION C</span>
+    <span class="desc">Keep lime but ghost form — white price</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#CADB2E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1"/></svg>
+        <span class="badge badge-value">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Best Value
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">iPhone 15 Pro Max 256GB</div>
+        <div class="card-variants">3 variants available</div>
+        <div class="card-price price-white">₦1,250,000</div>
+        <button class="btn-c">Order Now</button>
+        <div class="state-hint">Default: lime border · <strong style="color:#CADB2E">click</strong> to fill</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#CADB2E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14c0 0 2-1 5-1s5.5 2 9 2 4-1 4-1v3s-1 1-4 1-6-2-9-2-5 1-5 1v-3z"/><path d="M3 14l2-6h4l2 4"/></svg>
+        <span class="badge badge-sameday">
+          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Same Day
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Nike Air Max 270</div>
+        <div class="card-variants">Sizes 38–46</div>
+        <div class="card-price price-white">₦85,000</div>
+        <button class="btn-c">Order Now</button>
+        <div class="state-hint">Default: lime border · <strong style="color:#CADB2E">click</strong> to fill</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#CADB2E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Luxury Perfume Set — Versace Eros</div>
+        <div class="card-variants">100ml · 200ml</div>
+        <div class="card-price price-white">₦45,000</div>
+        <button class="btn-c">Order Now</button>
+        <div class="state-hint">Default: lime border · <strong style="color:#CADB2E">click</strong> to fill</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="compare-note">
+    <strong>Option C:</strong> Ghost lime is more restrained than filled lime. But lime sits in an odd spot — it's not the FA brand green, not warm. Reads slightly acidic next to the green badges. Good middle ground if you specifically want lime retained.
+  </div>
+</div>
+
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<!-- SECTION 5 — SOLID GREEN BTN (NO GHOST)                       -->
+<!-- ═════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">
+    <h2>5 — White price · Solid green always</h2>
+    <span class="tag tag-option">OPTION D</span>
+    <span class="desc">Swap lime for brand green, keep it filled — no interaction change</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1"/></svg>
+        <span class="badge badge-value">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Best Value
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">iPhone 15 Pro Max 256GB</div>
+        <div class="card-variants">3 variants available</div>
+        <div class="card-price price-white">₦1,250,000</div>
+        <button class="btn-d">Order Now</button>
+        <div class="state-hint">Always filled · hover lifts · no state change</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14c0 0 2-1 5-1s5.5 2 9 2 4-1 4-1v3s-1 1-4 1-6-2-9-2-5 1-5 1v-3z"/><path d="M3 14l2-6h4l2 4"/></svg>
+        <span class="badge badge-sameday">
+          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Same Day
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Nike Air Max 270</div>
+        <div class="card-variants">Sizes 38–46</div>
+        <div class="card-price price-white">₦85,000</div>
+        <button class="btn-d">Order Now</button>
+        <div class="state-hint">Always filled · hover lifts · no state change</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Luxury Perfume Set — Versace Eros</div>
+        <div class="card-variants">100ml · 200ml</div>
+        <div class="card-price price-white">₦45,000</div>
+        <button class="btn-d">Order Now</button>
+        <div class="state-hint">Always filled · hover lifts · no state change</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="compare-note">
+    <strong>Option D:</strong> Simplest migration — just swap lime → brand green, white price. Badge and button are the same green which creates repetition. Least dramatic change from current layout but fixes the lime/gold problem.
+  </div>
+</div>
+
+
+<!-- ═════════════════════════════════════════════════════════════ -->
+<!-- SECTION 6 — BONUS: WHITE PRICE + SUBTLE GHOST (neutral)      -->
+<!-- ═════════════════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-label">
+    <h2>6 — White price · Neutral ghost → subtle fill on click</h2>
+    <span class="tag tag-bonus">BONUS</span>
+    <span class="desc">Ultra-minimal — no color on button at all by default</span>
+  </div>
+  <div class="cards">
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><circle cx="12" cy="17" r="1"/></svg>
+        <span class="badge badge-value">
+          <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          Best Value
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">iPhone 15 Pro Max 256GB</div>
+        <div class="card-variants">3 variants available</div>
+        <div class="card-price price-white">₦1,250,000</div>
+        <button class="btn-e">Order Now</button>
+        <div class="state-hint">Neutral border · hover brightens · click tints</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 14c0 0 2-1 5-1s5.5 2 9 2 4-1 4-1v3s-1 1-4 1-6-2-9-2-5 1-5 1v-3z"/><path d="M3 14l2-6h4l2 4"/></svg>
+        <span class="badge badge-sameday">
+          <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          Same Day
+        </span>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Nike Air Max 270</div>
+        <div class="card-variants">Sizes 38–46</div>
+        <div class="card-price price-white">₦85,000</div>
+        <button class="btn-e">Order Now</button>
+        <div class="state-hint">Neutral border · hover brightens · click tints</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-img">
+        <svg class="product-icon" viewBox="0 0 24 24" fill="none" stroke="#05D471" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      </div>
+      <div class="card-info">
+        <div class="card-name">Luxury Perfume Set — Versace Eros</div>
+        <div class="card-variants">100ml · 200ml</div>
+        <div class="card-price price-white">₦45,000</div>
+        <button class="btn-e">Order Now</button>
+        <div class="state-hint">Neutral border · hover brightens · click tints</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="compare-note">
+    <strong>Bonus:</strong> Zero color on the button — completely neutral. The green badge does all the visual work. Very premium / editorial feel. Weakest CTA signal of all options — customers might not click as readily. Better for a curated store, possibly too passive for FA's volume catalog.
+  </div>
+</div>
+
+</body>
+</html>
