@@ -263,14 +263,16 @@ body.no-scroll {
 
 .store-reach {
   font-size: 0.72rem;
-  color: var(--text-dim);
+  color: var(--primary);
   text-align: right;
   line-height: 1.4;
+  text-decoration: none;
+  opacity: 0.75;
+  transition: opacity 0.2s;
 }
 
-.store-reach strong {
-  color: var(--primary);
-  font-weight: 600;
+.store-reach:hover {
+  opacity: 1;
 }
 
 .hiw-strip {

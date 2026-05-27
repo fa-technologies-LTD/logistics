@@ -1,5 +1,9 @@
 User-agent: *
 Allow: /
 Disallow: /stafflookup/
+Disallow: /FA_Logistics_Product_Pricing_Catalog.csv
+Disallow: /products.csv
+Disallow: /notes.txt
+Disallow: /color-test.html
 
-Sitemap: https://fastaccs.com/FAlogistics/sitemap.xml
+Sitemap: https://fastaccs.com/logistics/sitemap.xml

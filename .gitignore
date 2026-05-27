@@ -4,3 +4,5 @@ __pycache__/
 *.pyc
 upload_to_github.py
 style-guide.html
+
+notes.txt

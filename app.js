@@ -8,9 +8,12 @@
 'use strict';
 
 // ── Constants ──
-const WHATSAPP_NUMBER = '2347066399871';
+const WHATSAPP_LINK = 'https://wa.link/fast_accounts';
 const BATCH_SIZE = 50;
 const MAX_RETRIES = 3;
+const PRODUCTS_URL = 'products.json';
+const PRODUCTS_CACHE_KEY = 'faLogisticsProductsCacheV1';
+const PRODUCTS_CACHE_MAX_AGE_MS = 1000 * 60 * 30;
 
 // ── Inline SVG Icons (16×16, stroke-based) ──
 const ICONS = {
@@ -112,30 +115,70 @@ function loadingHTML(msg = 'Loading products…') {
   </div>`;
 }
 
+function applyProductsData(jsonData) {
+  allProducts = parseJSON(jsonData);
+  allProducts = prioritizeProducts(allProducts);
+
+  filteredProducts = [...allProducts];
+
+  // Restore filters from URL before first render
+  restoreFiltersFromURL();
+
+  renderProducts();
+  updateResultsCount();
+  checkProductUrlParam();
+}
+
+function getCachedProducts() {
+  try {
+    const raw = localStorage.getItem(PRODUCTS_CACHE_KEY);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw);
+    if (!parsed || !Array.isArray(parsed.data) || typeof parsed.ts !== 'number') return null;
+    if (Date.now() - parsed.ts > PRODUCTS_CACHE_MAX_AGE_MS) return null;
+
+    return parsed.data;
+  } catch (e) {
+    return null;
+  }
+}
+
+function setCachedProducts(data) {
+  try {
+    localStorage.setItem(PRODUCTS_CACHE_KEY, JSON.stringify({ ts: Date.now(), data }));
+  } catch (e) {
+    // Ignore storage write failures (private mode/full storage)
+  }
+}
+
 async function loadProducts(retryCount = 0) {
   const grid = document.getElementById('productsGrid');
+  const cachedData = getCachedProducts();
 
   try {
     grid.innerHTML = loadingHTML();
 
-    const response = await fetch(`products.json?v=${Date.now()}`, { cache: 'no-store' });
+    if (cachedData) {
+      // Render cached catalog immediately for fast repeat visits.
+      applyProductsData(cachedData);
+    }
+
+    const response = await fetch(PRODUCTS_URL, { cache: 'no-cache' });
 
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
 
     const jsonData = await response.json();
-    allProducts = parseJSON(jsonData);
-    allProducts = prioritizeProducts(allProducts);
-
-    filteredProducts = [...allProducts];
-
-    // Restore filters from URL before first render
-    restoreFiltersFromURL();
-
-    renderProducts();
-    updateResultsCount();
-    checkProductUrlParam();
+    setCachedProducts(jsonData);
+    applyProductsData(jsonData);
   } catch (error) {
     console.error('Error loading products:', error);
+
+    if (cachedData) {
+      // Keep usable cached data on screen when refresh fails.
+      console.warn('Using cached product catalog due to network error.');
+      return;
+    }
 
     if (retryCount < MAX_RETRIES) {
       // Auto-retry with back-off
@@ -168,6 +211,10 @@ async function loadProducts(retryCount = 0) {
 function prioritizeProducts(products) {
   const featuredIds = ['PROD-1492', 'PROD-1489']; // Fresh Flower Bouquet, 2-in-1 Pizza Deal
   const priorityKeywords = ['flower', 'rose', 'bouquet', 'pizza', 'drink', 'beverage', 'chicken', 'ring', 'engagement', 'wedding', 'document', 'certificate', 'processing'];
+  const forcedPlacement = new Map([
+    ['PROD-1487', 4],  // 5th position (0-based index)
+    ['PROD-1488', 12]  // 13th position (0-based index)
+  ]);
   const featuredMap = new Map();
 
   products.forEach(product => {
@@ -193,19 +240,40 @@ function prioritizeProducts(products) {
   const firstFeatured = featuredMap.get(featuredIds[0]);
   const secondFeatured = featuredMap.get(featuredIds[1]);
 
+  let arranged;
   if (firstFeatured && secondFeatured) {
     const splitIndex = Math.min(10, prioritized.length);
-    return [
+    arranged = [
       firstFeatured,
       ...prioritized.slice(0, splitIndex),
       secondFeatured,
       ...prioritized.slice(splitIndex)
     ];
+  } else if (firstFeatured) {
+    arranged = [firstFeatured, ...prioritized];
+  } else if (secondFeatured) {
+    arranged = [secondFeatured, ...prioritized];
+  } else {
+    arranged = prioritized;
   }
 
-  if (firstFeatured) return [firstFeatured, ...prioritized];
-  if (secondFeatured) return [secondFeatured, ...prioritized];
-  return prioritized;
+  const forcedProducts = new Map();
+  arranged = arranged.filter(product => {
+    if (forcedPlacement.has(product.productId)) {
+      forcedProducts.set(product.productId, product);
+      return false;
+    }
+    return true;
+  });
+
+  for (const [productId, targetIndex] of forcedPlacement.entries()) {
+    const forcedProduct = forcedProducts.get(productId);
+    if (!forcedProduct) continue;
+    const insertAt = Math.max(0, Math.min(targetIndex, arranged.length));
+    arranged.splice(insertAt, 0, forcedProduct);
+  }
+
+  return arranged;
 }
 
 // Parse CSV with proper handling of quotes, commas, and newlines
@@ -978,7 +1046,7 @@ function sendToWhatsApp() {
     checkout_city: city || ''
   });
 
-  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+  window.open(`${WHATSAPP_LINK}?text=${encodeURIComponent(message)}`, '_blank');
   hideCheckoutForm();
   hideCartModal();
 }

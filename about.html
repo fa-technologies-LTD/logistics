@@ -3,10 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FA Logistics — Send Gifts Anywhere in the World</title>
+  <title>FA Logistics — How We Deliver Gifts Worldwide</title>
   <meta name="description" content="Flowers, cakes, food, and curated gifts delivered locally in the US, Canada, UK, Europe, Asia, and beyond. 1,000+ successful deliveries.">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/fa-mark-white-transparent.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/fa-mark-white-transparent.png">
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://fastaccs.com/logistics/about.html">
+
+  <!-- Open Graph / WhatsApp Preview -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://fastaccs.com/logistics/about.html">
+  <meta property="og:site_name" content="FA LOGISTICS">
+  <meta property="og:title" content="FA Logistics — How We Deliver Gifts Worldwide">
+  <meta property="og:description" content="Flowers, cakes, food, and curated gifts delivered locally in 100+ countries. 1,000+ successful deliveries.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/fa-technologies-LTD/logistics/master/assets/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FA Logistics — How We Deliver Gifts Worldwide">
+  <meta name="twitter:description" content="Flowers, cakes, food, and curated gifts delivered locally in 100+ countries. 1,000+ successful deliveries.">
+  <meta name="twitter:image" content="https://raw.githubusercontent.com/fa-technologies-LTD/logistics/master/assets/og-image.png">
+
+  <meta name="theme-color" content="#07090C">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://i.ibb.co">
+  <link rel="preconnect" href="https://raw.githubusercontent.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -77,81 +104,56 @@
       line-height: 1.7;
     }
 
-    /* ─── HEADER ─── */
-    .site-header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 16px 24px;
+    /* ─── BACK NAV ─── */
+    .back-nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      background: rgba(7,9,12,0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      padding: 16px 24px;
       border-bottom: 1px solid var(--border);
-      transition: background 0.3s;
+      background: var(--bg);
     }
 
-    .header-brand {
+    .back-nav-brand {
       display: flex;
       align-items: center;
       gap: 10px;
       text-decoration: none;
+      color: var(--text);
     }
 
-    .header-brand img {
-      height: 32px;
+    .back-nav-brand img {
+      height: 30px;
       width: auto;
     }
 
-    .header-brand-text {
+    .back-nav-brand-text {
       font-family: 'DM Sans', sans-serif;
       font-weight: 700;
       font-size: 1rem;
-      color: var(--text);
       letter-spacing: 0.08em;
     }
 
-    .header-cta {
+    .back-nav-cta {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 9px 20px;
-      background: var(--primary);
-      color: #07090C;
+      padding: 8px 18px;
+      background: transparent;
+      border: 1.5px solid var(--primary);
+      color: var(--primary);
       font-family: 'DM Sans', sans-serif;
       font-weight: 700;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       border-radius: 8px;
       text-decoration: none;
-      transition: opacity 0.2s, transform 0.15s;
-      position: relative;
-      overflow: hidden;
-      /* hidden until hero button scrolls out */
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(-4px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      transition: background 0.2s, color 0.2s;
     }
 
-    .header-cta.visible {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
+    .back-nav-cta:hover {
+      background: var(--primary);
+      color: #07090C;
     }
-
-    .header-cta::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
-      animation: shimmerBtn 3.5s ease-in-out infinite;
-    }
-
-    .header-cta:hover { opacity: 0.88 !important; transform: translateY(-1px) !important; }
 
     /* ─── HERO ─── */
     .hero {
@@ -161,7 +163,7 @@
       justify-content: center;
       position: relative;
       overflow: hidden;
-      padding: 100px 24px 80px;
+      padding: 60px 24px 80px;
       text-align: center;
     }
 
@@ -898,23 +900,21 @@
       /* footer */
       .footer-inner { flex-direction: column; gap: 10px; }
 
-      /* header */
-      .header-brand-text { display: none; }
+      /* back nav */
+      .back-nav-brand-text { display: none; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="site-header">
-    <a href="index.html" class="header-brand">
+  <!-- Back nav -->
+  <nav class="back-nav">
+    <a href="index.html" class="back-nav-brand">
       <img src="assets/fa-mark-white-transparent.png" alt="FA Logistics">
-      <span class="header-brand-text">FA LOGISTICS</span>
+      <span class="back-nav-brand-text">FA LOGISTICS</span>
     </a>
-    <a href="index.html#products" class="header-cta" id="headerCta">
-      🎁 Send a Gift
-    </a>
-  </header>
+    <a href="index.html#products" class="back-nav-cta">🎁 Send a Gift</a>
+  </nav>
 
 
   <!-- ① HERO -->
@@ -1263,7 +1263,7 @@
             <div class="testimonial-img"><img src="assets/testimonials/WhatsApp Image 2026-03-02 at 10.53.41 PM.jpeg" alt="Delivery confirmation" loading="lazy"></div>
             <div class="testimonial-img"><img src="assets/testimonials/WhatsApp Image 2026-03-03 at 11.40.45 AM.jpeg" alt="Delivery confirmation" loading="lazy"></div>
             <div class="testimonial-img"><img src="assets/testimonials/WhatsApp Image 2026-03-04 at 11.04.34 AM.jpeg" alt="Delivery confirmation" loading="lazy"></div>
-            <div class="testimonial-img"><img src="assets/testimonials/Screenshot 2026-03-04 at 22.57.37.png" alt="Delivery confirmation" loading="lazy"></div>
+            <div class="testimonial-img"><img src="assets/testimonials/Screenshot 2026-03-04 at 22.57.37.jpg" alt="Delivery confirmation" loading="lazy"></div>
           </div>
         </div>
       </div>
@@ -1297,55 +1297,12 @@
         <div class="footer-links">
           <a href="logistics/policies.html" target="_blank">Policies</a>
           <a href="privacy.html" target="_blank">Privacy</a>
-          <a href="https://wa.me/2347066399871" target="_blank">WhatsApp</a>
+          <a href="https://wa.link/fast_accounts" target="_blank">WhatsApp</a>
         </div>
       </div>
     </div>
   </footer>
 
-  <script>
-    // Header CTA: visible only when hero button is out of view AND bottom CTA is out of view
-    const heroBtn = document.getElementById('heroGiftBtn');
-    const headerCta = document.getElementById('headerCta');
-    const bottomCta = document.getElementById('bottomCta');
-
-    let heroOut = false;
-    let bottomVisible = false;
-
-    function updateHeaderCta() {
-      if (heroOut && !bottomVisible) {
-        headerCta.classList.add('visible');
-      } else {
-        headerCta.classList.remove('visible');
-      }
-    }
-
-    if (heroBtn && headerCta) {
-      const heroObserver = new IntersectionObserver(
-        ([entry]) => {
-          heroOut = !entry.isIntersecting;
-          updateHeaderCta();
-        },
-        { threshold: 0.1 }
-      );
-      heroObserver.observe(heroBtn);
-    }
-
-    // Bottom CTA: animate in when scrolled into view, also hides header CTA
-    if (bottomCta) {
-      const bottomObserver = new IntersectionObserver(
-        ([entry]) => {
-          bottomVisible = entry.isIntersecting;
-          if (entry.isIntersecting) {
-            bottomCta.classList.add('visible');
-          }
-          updateHeaderCta();
-        },
-        { threshold: 0.2 }
-      );
-      bottomObserver.observe(bottomCta);
-    }
-  </script>
 
 </body>
 </html>
