@@ -364,12 +364,24 @@ function parseJSON(jsonData) {
   let productId = 1;
 
   for (const row of jsonData) {
-    const name = (row.name || '').replace(/\n/g, ' ').trim();
-    const description = (row.description || '').replace(/\n/g, ' ').trim();
-    const finalPrice = (row.final_price || '').trim();
-    const variantsPrices = (row.variants_final_prices || '').trim();
-    const imageUrl = (row.image || '').trim();
-    const sameDayStr = (row.sameDay || '').trim().toLowerCase();
+    const source = Array.isArray(row)
+      ? {
+          product_id: row[0],
+          name: row[1],
+          description: row[2],
+          final_price: row[3],
+          variants_final_prices: row[4],
+          image: row[5],
+          sameDay: row[6]
+        }
+      : row;
+
+    const name = (source.name || '').replace(/\n/g, ' ').trim();
+    const description = (source.description || '').replace(/\n/g, ' ').trim();
+    const finalPrice = (source.final_price || '').trim();
+    const variantsPrices = (source.variants_final_prices || '').trim();
+    const imageUrl = (source.image || '').trim();
+    const sameDayStr = (source.sameDay || '').trim().toLowerCase();
 
     const variants = parseVariants(variantsPrices);
 
@@ -389,7 +401,7 @@ function parseJSON(jsonData) {
 
     products.push({
       id: productId++,
-      productId: (row.product_id || '').trim(),
+      productId: (source.product_id || '').trim(),
       name: name,
       description: descClean,
       price: displayPrice,
