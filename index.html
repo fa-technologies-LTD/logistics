@@ -92,25 +92,46 @@
     alt=""
   /></noscript>
 
-  <!-- Brand Strip — scrolls away -->
-  <div class="store-brand-strip">
-    <a href="https://fastaccs.com" class="store-brand-identity">
-      <img src="assets/fa-mark-white-transparent.png" alt="FA Logistics">
-      <span class="store-brand-name">FA LOGISTICS</span>
+  <!-- Logistics Header — scrolls away before sticky search -->
+  <header class="logistics-topbar" aria-label="FA Logistics header">
+    <a href="/logistics/" class="logistics-brand" aria-label="FA Logistics home">
+      <img src="assets/fa-mark-white-transparent.png" alt="" width="516" height="548">
+      <span>
+        <strong>FA LOGISTICS</strong>
+        <small>Gifts &amp; deliveries worldwide</small>
+      </span>
     </a>
-    <a href="about.html#social-proof" target="_blank" class="store-reach">1,000+ successful deliveries in 100+ countries</a>
-  </div>
 
-  <!-- How It Works Strip — scrolls away -->
-  <div class="hiw-strip">
-    <a href="about.html" target="_blank" class="hiw-learn">See how we do it →</a>
-  </div>
+    <nav class="logistics-nav" aria-label="Primary">
+      <a href="#products">Shop Gifts</a>
+      <a href="about.html">How It Works</a>
+      <a href="about.html#social-proof">Proof</a>
+      <a href="https://wa.link/fast_accounts" target="_blank" rel="noopener noreferrer">Support</a>
+    </nav>
+
+    <a href="about.html#social-proof" class="logistics-proof">1,000+ gifts delivered in over 100 countries</a>
+
+    <details class="logistics-mobile-nav">
+      <summary aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>
+      </summary>
+      <nav aria-label="Mobile primary">
+        <a href="#products">Shop Gifts</a>
+        <a href="about.html">How It Works</a>
+        <a href="about.html#social-proof">Proof</a>
+        <a href="logistics/policies.html">Policies</a>
+        <a href="https://wa.link/fast_accounts" target="_blank" rel="noopener noreferrer">Support</a>
+      </nav>
+    </details>
+  </header>
 
   <!-- Sticky Search & Filters -->
   <div class="sticky-search-wrapper" id="stickySearch">
     <div class="search-container">
       <div class="search-input-wrapper" role="search">
-        <span class="search-icon" aria-hidden="true">🔍</span>
+        <span class="search-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.35-4.35"/><circle cx="11" cy="11" r="7"/></svg>
+        </span>
         <input 
           type="search" 
           class="search-input" 
@@ -122,7 +143,9 @@
         <button class="search-clear" id="searchClear" type="button" aria-label="Clear search">&times;</button>
       </div>
       <div class="cart-icon-wrapper" id="cartIconBtn">
-        <div class="cart-icon">🛒</div>
+        <div class="cart-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M17 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M17 17H6V3H4"/><path d="m6 5 14 1-1 7H6"/></svg>
+        </div>
         <div class="cart-count" id="cartCount" style="display: none;">0</div>
       </div>
     </div>
@@ -174,7 +197,9 @@
     <div class="load-more-sentinel" id="loadMoreSentinel" style="display: none;"></div>
     
     <div class="empty-state" id="emptyState" style="display: none;">
-      <div class="empty-icon">🔍</div>
+      <div class="empty-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m21 21-4.35-4.35"/><circle cx="11" cy="11" r="7"/></svg>
+      </div>
       <div class="empty-text">No products found</div>
       <div class="empty-hint">Try adjusting your search or filters</div>
     </div>
@@ -183,17 +208,29 @@
   <!-- Footer -->
   <footer class="footer">
     <div class="footer-bottom">
-      <div class="footer-credit">© 2026 FA Technologies LTD</div>
-      <div class="footer-credit">
-        <a href="logistics/policies.html" target="_blank">Policies</a>
-        <span style="margin: 0 8px;">•</span>
-        <a href="privacy.html" target="_blank">Privacy</a>
+      <div class="footer-brand">
+        <img src="assets/fa-mark-white-transparent.png" alt="" width="516" height="548">
+        <div>
+          <strong>FA Logistics</strong>
+          <span>Gifts, meals, flowers, and surprise deliveries worldwide.</span>
+        </div>
       </div>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="#products">Shop Gifts</a>
+        <a href="about.html">How It Works</a>
+        <a href="about.html#social-proof">Proof</a>
+        <a href="logistics/policies.html">Policies</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="https://wa.link/fast_accounts" target="_blank" rel="noopener noreferrer">WhatsApp Support</a>
+      </nav>
+      <div class="footer-credit">SSL Secured &middot; © 2026 FA Technologies LTD</div>
     </div>
   </footer>
 
   <!-- Back to Top Button -->
-  <button class="back-to-top" id="backToTop" aria-label="Back to top">↑</button>
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 15-6-6-6 6"/></svg>
+  </button>
 
   <!-- Variant Selection Modal -->
   <div class="modal" id="variantModal" role="dialog" aria-modal="true" aria-label="Select variant">
@@ -214,12 +251,17 @@
   <div class="cart-modal" id="cartModal" role="dialog" aria-modal="true" aria-label="Shopping cart">
     <div class="cart-modal-content">
       <div class="cart-header">
-        <h2 class="cart-title">🛒 Your Cart</h2>
+        <h2 class="cart-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M17 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M17 17H6V3H4"/><path d="m6 5 14 1-1 7H6"/></svg>
+          Your Cart
+        </h2>
         <button class="modal-close" id="cartModalClose" type="button" aria-label="Close cart">×</button>
       </div>
       <div class="cart-items-container" id="cartItemsContainer">
         <div class="cart-empty" id="cartEmpty">
-          <div class="cart-empty-icon">🛒</div>
+          <div class="cart-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          </div>
           <div class="cart-empty-text">Your cart is empty</div>
         </div>
       </div>
@@ -262,7 +304,10 @@
   <div class="checkout-overlay" id="checkoutOverlay" role="dialog" aria-modal="true" aria-label="Delivery location">
     <div class="checkout-form-content">
       <div class="checkout-form-header">
-        <h2 class="checkout-form-title">📍 Delivery Location</h2>
+        <h2 class="checkout-form-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s7-4.35 7-11a7 7 0 1 0-14 0c0 6.65 7 11 7 11Z"/><circle cx="12" cy="10" r="2.5"/></svg>
+          Delivery Location
+        </h2>
         <button class="modal-close" id="checkoutFormClose" type="button" aria-label="Close checkout">×</button>
       </div>
       <p class="checkout-form-subtitle">Select your delivery destination</p>
