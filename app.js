@@ -8,7 +8,7 @@
 'use strict';
 
 // ── Constants ──
-const WHATSAPP_LINK = 'https://wa.link/fast_accounts';
+const WHATSAPP_ORDER_NUMBER = '2347066399871';
 const BATCH_SIZE = 50;
 const MAX_RETRIES = 3;
 const PRODUCTS_URL = 'products.json';
@@ -1031,7 +1031,7 @@ function sendToWhatsApp() {
     const priceStr = item.price || `₦${priceVal.toLocaleString()}`;
     const qtyStr = item.qty > 1 ? ` ×${item.qty}` : '';
     const lineTotal = item.qty > 1 ? ` = ₦${(priceVal * item.qty).toLocaleString()}` : '';
-    message += `${index + 1}. ${code} — ${priceStr}${qtyStr}${lineTotal}\n`;
+    message += `${index + 1}. ${code} — ${item.product.name} — ${priceStr}${qtyStr}${lineTotal}\n`;
     if (item.variant) {
       message += `   ↳ ${item.variant.name}\n`;
     }
@@ -1058,7 +1058,7 @@ function sendToWhatsApp() {
     checkout_city: city || ''
   });
 
-  window.open(`${WHATSAPP_LINK}?text=${encodeURIComponent(message)}`, '_blank');
+  window.open(`https://wa.me/${WHATSAPP_ORDER_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
   hideCheckoutForm();
   hideCartModal();
 }
