@@ -6,4 +6,4 @@ Disallow: /products.csv
 Disallow: /notes.txt
 Disallow: /color-test.html
 
-Sitemap: https://fastaccs.com/logistics/sitemap.xml
+Sitemap: https://gifting.fastaccs.com/sitemap.xml

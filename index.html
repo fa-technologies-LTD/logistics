@@ -11,7 +11,7 @@
 
   <!-- Open Graph / WhatsApp Preview -->
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://fastaccs.com/logistics/">
+  <meta property="og:url" content="https://gifting.fastaccs.com/">
   <meta property="og:site_name" content="FA LOGISTICS">
   <meta property="og:title" content="FA Logistics | Gifts & Deliveries Worldwide">
   <meta property="og:description" content="Order gifts, flowers, meals, and surprise packages worldwide through trusted local vendors.">
@@ -44,7 +44,7 @@
   <meta name="theme-color" content="#07090C">
 
   <!-- Canonical URL -->
-  <link rel="canonical" href="https://fastaccs.com/logistics/">
+  <link rel="canonical" href="https://gifting.fastaccs.com/">
 
   <!-- JSON-LD Structured Data -->
   <script type="application/ld+json">
@@ -52,7 +52,7 @@
     "@context": "https://schema.org",
     "@type": "Store",
     "name": "FA Logistics",
-    "url": "https://fastaccs.com/logistics/",
+    "url": "https://gifting.fastaccs.com/",
     "logo": "https://raw.githubusercontent.com/fa-technologies-LTD/logistics/master/assets/fa-logo-green-black-bg.png",
     "description": "Order gifts, flowers, meals, and surprise packages worldwide through trusted local vendors across 100+ countries.",
     "address": {
@@ -64,7 +64,7 @@
     ],
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://fastaccs.com/logistics/?q={search_term_string}",
+      "target": "https://gifting.fastaccs.com/?q={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   }
@@ -74,7 +74,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://i.ibb.co">
   <link rel="preconnect" href="https://raw.githubusercontent.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <script src="assets/fa-ga4.js" defer></script>
 </head>
@@ -86,7 +86,7 @@
 
   <!-- Logistics Header — scrolls away before sticky search -->
   <header class="logistics-topbar" aria-label="FA Logistics header">
-    <a href="/logistics/" class="logistics-brand" aria-label="FA Logistics home">
+    <a href="/" class="logistics-brand" aria-label="FA Logistics home">
       <img src="assets/fa-mark-white-transparent.png" alt="" width="516" height="548">
       <span>
         <strong>FA LOGISTICS</strong>
@@ -134,6 +134,10 @@
         >
         <button class="search-clear" id="searchClear" type="button" aria-label="Clear search">&times;</button>
       </div>
+      <div class="ship-pill" aria-hidden="false">
+        <span class="ship-pill-icon" aria-hidden="true">📦</span>
+        <select id="shipCountrySelect" class="ship-pill-select" aria-label="Shipping destination"></select>
+      </div>
       <div class="cart-icon-wrapper" id="cartIconBtn">
         <div class="cart-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M17 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M17 17H6V3H4"/><path d="m6 5 14 1-1 7H6"/></svg>
@@ -180,8 +184,22 @@
     </div>
   </div>
 
+  <!-- Real delivery proof, visible to first-time visitors -->
+  <div class="home-proof">
+    <p class="home-proof-label">Real delivery confirmations</p>
+    <div class="testimonials-scroll">
+      <div class="testimonial-img"><img src="assets/testimonials/WhatsApp Image 2026-01-01 at 10.42.51 AM.jpeg" alt="Delivery confirmation" loading="lazy"></div>
+      <div class="testimonial-img"><img src="assets/testimonials/WhatsApp Image 2026-01-09 at 11.22.14 AM.jpeg" alt="Delivery confirmation" loading="lazy"></div>
+      <div class="testimonial-img"><img src="assets/testimonials/WhatsApp Image 2026-01-20 at 9.18.53 AM.jpeg" alt="Delivery confirmation" loading="lazy"></div>
+      <div class="testimonial-img"><img src="assets/testimonials/WhatsApp Image 2026-02-14 at 8.14.28 PM.jpeg" alt="Delivery confirmation" loading="lazy"></div>
+      <div class="testimonial-img"><img src="assets/testimonials/WhatsApp Image 2026-02-14 at 10.37.37 PM.jpeg" alt="Delivery confirmation" loading="lazy"></div>
+    </div>
+    <a href="about.html#social-proof" class="home-proof-more">See all delivery proof →</a>
+  </div>
+
   <!-- Main Content -->
   <main class="main" id="products">
+    <p class="ship-disclaimer" id="shipDisclaimer">Prices shown are for US delivery.</p>
     <div class="products-grid" id="productsGrid">
       <div class="loading">Loading products...</div>
     </div>
@@ -305,19 +323,13 @@
       <p class="checkout-form-subtitle">Select your delivery destination</p>
       <div class="checkout-field">
         <label class="checkout-label" for="checkoutCountry">Country</label>
-        <select class="checkout-select" id="checkoutCountry">
+        <select class="checkout-select" id="checkoutCountry" required>
           <option value="">Select country…</option>
         </select>
       </div>
       <div class="checkout-field">
-        <label class="checkout-label" for="checkoutState">State / Region</label>
-        <select class="checkout-select" id="checkoutState" disabled>
-          <option value="">Select country first…</option>
-        </select>
-      </div>
-      <div class="checkout-field">
         <label class="checkout-label" for="checkoutCity">City (optional)</label>
-        <input type="text" class="checkout-input" id="checkoutCity" placeholder="e.g. Oklahoma, London, Houston…">
+        <input type="text" class="checkout-input" id="checkoutCity" placeholder="e.g. Lagos, London, Houston…">
       </div>
       <div class="checkout-field" style="margin-top: 20px;">
         <label style="display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-size: 0.95rem; color: var(--text-muted); line-height: 1.5;">

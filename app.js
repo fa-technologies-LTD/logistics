@@ -14,6 +14,29 @@ const MAX_RETRIES = 3;
 const PRODUCTS_URL = 'products.json';
 const PRODUCTS_CACHE_KEY = 'faLogisticsProductsCacheV1';
 const PRODUCTS_CACHE_MAX_AGE_MS = 1000 * 60 * 30;
+const SHIP_COUNTRY_KEY = 'faLogisticsShipCountry';
+const DOMESTIC_COUNTRY = 'United States';
+
+// ── Shipping Destination ──
+// Default (nothing chosen yet) is treated as domestic, since most visitors
+// ship within the US and today's prices are already correct for them.
+function getShipCountry() {
+  try {
+    return localStorage.getItem(SHIP_COUNTRY_KEY) || DOMESTIC_COUNTRY;
+  } catch (e) {
+    return DOMESTIC_COUNTRY;
+  }
+}
+
+function setShipCountry(country) {
+  try {
+    localStorage.setItem(SHIP_COUNTRY_KEY, country);
+  } catch (e) { /* silently fail */ }
+}
+
+function isDomesticDestination() {
+  return getShipCountry() === DOMESTIC_COUNTRY;
+}
 
 // ── Inline SVG Icons (16×16, stroke-based) ──
 const ICONS = {
@@ -107,8 +130,8 @@ function loadingHTML(msg = 'Loading products…') {
             <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
           </filter>
         </defs>
-        <circle cx="60" cy="60" r="52" stroke="#3A7B6F" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="55 271.73" class="fa-ring-tail"/>
-        <circle cx="60" cy="60" r="52" stroke="#05D471" stroke-width="3" stroke-linecap="round" stroke-dasharray="20 306.73" class="fa-ring-head" filter="url(#fa-glow)"/>
+        <circle cx="60" cy="60" r="52" stroke="#7A6B3A" stroke-width="5.5" stroke-linecap="round" stroke-dasharray="55 271.73" class="fa-ring-tail"/>
+        <circle cx="60" cy="60" r="52" stroke="#D4AF37" stroke-width="3" stroke-linecap="round" stroke-dasharray="20 306.73" class="fa-ring-head" filter="url(#fa-glow)"/>
       </svg>
     </div>
     <span class="fa-loader__text">${msg}</span>
@@ -527,7 +550,9 @@ function renderProducts() {
 
 function generateCardHTML(product) {
   const hasVariants = product.variants.length > 0;
-  const priceDisplay = hasVariants ? `From ${product.price}` : product.price;
+  const priceDisplay = isDomesticDestination()
+    ? (hasVariants ? `From ${product.price}` : product.price)
+    : 'Select this item';
   const variantInfo = hasVariants ? `${product.variants.length} options available` : '';
   const badge = getProductBadge(product);
   const deliveryBadge = product.sameDay ? `<div class="product-badge delivery">${ICONS.bolt} Same Day</div>` : '';
@@ -552,6 +577,26 @@ function generateCardHTML(product) {
       </div>
     </div>
   `;
+}
+
+// Patches already-rendered card prices in place when the shipping
+// destination changes, without rebuilding card HTML (and re-binding
+// handlers). Cards generated after this point pick up the new state
+// automatically via generateCardHTML/isDomesticDestination above.
+function refreshAllPrices() {
+  const domestic = isDomesticDestination();
+  document.querySelectorAll('.product-card').forEach(card => {
+    const product = allProducts.find(p => p.id === parseInt(card.dataset.productId));
+    if (!product) return;
+    const priceEl = card.querySelector('.product-price');
+    if (!priceEl) return;
+    priceEl.textContent = domestic
+      ? (product.variants.length > 0 ? `From ${product.price}` : product.price)
+      : 'Select this item';
+  });
+
+  const disclaimer = document.getElementById('shipDisclaimer');
+  if (disclaimer) disclaimer.style.display = domestic ? '' : 'none';
 }
 
 function loadMoreProducts() {
@@ -748,15 +793,24 @@ function renderCartItems() {
   }
 
   footer.style.display = 'block';
-  const total = cart.reduce((sum, item) => {
-    const priceVal = normalizePriceValue(item.price, item.priceValue);
-    return sum + (priceVal * item.qty);
-  }, 0);
-  totalAmount.textContent = `₦${total.toLocaleString()}`;
+  const domestic = isDomesticDestination();
+  const totalRow = totalAmount.closest('.cart-total');
+  if (totalRow) totalRow.style.display = domestic ? '' : 'none';
+
+  if (domestic) {
+    const total = cart.reduce((sum, item) => {
+      const priceVal = normalizePriceValue(item.price, item.priceValue);
+      return sum + (priceVal * item.qty);
+    }, 0);
+    totalAmount.textContent = `₦${total.toLocaleString()}`;
+  }
 
   container.innerHTML = cart.map(item => {
     const priceVal = normalizePriceValue(item.price, item.priceValue);
     const priceStr = item.price || `₦${priceVal.toLocaleString()}`;
+    const priceLine = domestic
+      ? `${priceStr}${item.qty > 1 ? ` × ${item.qty} = ₦${(priceVal * item.qty).toLocaleString()}` : ''}`
+      : 'Price by quote';
     const thumbContent = item.product.imageUrl
       ? `<img src="${item.product.imageUrl}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
          <span class="icon-fallback" style="display:none">${item.product.emoji}</span>`
@@ -767,7 +821,7 @@ function renderCartItems() {
       <div class="cart-item-details">
         <div class="cart-item-name">${item.product.name}</div>
         ${item.variant ? `<div class="cart-item-variant">${item.variant.name}</div>` : ''}
-          <div class="cart-item-price">${priceStr}${item.qty > 1 ? ` × ${item.qty} = ₦${(priceVal * item.qty).toLocaleString()}` : ''}</div>
+          <div class="cart-item-price">${priceLine}</div>
       </div>
       <div class="cart-item-controls">
         <div class="cart-item-qty">
@@ -804,7 +858,7 @@ function showVariantModalForCart() {
   variantList.innerHTML = selectedProduct.variants.map((variant, index) => `
     <div class="variant-option" data-variant-index="${index}" role="option" tabindex="0" aria-selected="false">
       <span class="variant-name">${variant.name}</span>
-      <span class="variant-price">${variant.price}</span>
+      <span class="variant-price">${isDomesticDestination() ? variant.price : 'Select'}</span>
     </div>
   `).join('');
 
@@ -857,7 +911,9 @@ function showProductDetail(productId) {
   const badge = getProductBadge(product);
   document.getElementById('detailBadge').innerHTML = badge ? badge.replace('product-badge', 'detail-badge') : '';
   document.getElementById('detailName').textContent = product.name;
-  document.getElementById('detailPrice').textContent = product.variants.length > 0 ? `From ${product.price}` : product.price;
+  document.getElementById('detailPrice').textContent = isDomesticDestination()
+    ? (product.variants.length > 0 ? `From ${product.price}` : product.price)
+    : 'Select this item';
   document.getElementById('detailDescription').textContent = product.description || 'No description available.';
 
   const variantsSection = document.getElementById('detailVariantsSection');
@@ -868,7 +924,7 @@ function showProductDetail(productId) {
     variantsList.innerHTML = product.variants.map((v, i) => `
       <div class="detail-variant" data-variant-index="${i}" role="option" tabindex="0" aria-selected="false">
         <span class="detail-variant-name">${v.name}</span>
-        <span class="detail-variant-price">${v.price}</span>
+        <span class="detail-variant-price">${isDomesticDestination() ? v.price : 'Select'}</span>
       </div>
     `).join('');
 
@@ -957,43 +1013,56 @@ function proceedToWhatsApp() {
   showCheckoutForm();
 }
 
-const LOCATION_DATA = {
-  'Nigeria': ['Abia','Adamawa','Akwa Ibom','Anambra','Bauchi','Bayelsa','Benue','Borno','Cross River','Delta','Ebonyi','Edo','Ekiti','Enugu','FCT - Abuja','Gombe','Imo','Jigawa','Kaduna','Kano','Katsina','Kebbi','Kogi','Kwara','Lagos','Nasarawa','Niger','Ogun','Ondo','Osun','Oyo','Plateau','Rivers','Sokoto','Taraba','Yobe','Zamfara'],
-  'United States': ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming','Washington D.C.'],
-  'United Kingdom': ['England','Scotland','Wales','Northern Ireland','London'],
-  'Canada': ['Alberta','British Columbia','Manitoba','New Brunswick','Newfoundland and Labrador','Nova Scotia','Ontario','Prince Edward Island','Quebec','Saskatchewan'],
-  'Ghana': ['Greater Accra','Ashanti','Central','Eastern','Northern','Western','Volta','Upper East','Upper West','Brong-Ahafo'],
-  'South Africa': ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','North West','Northern Cape','Western Cape'],
-  'Germany': ['Baden-Württemberg','Bavaria','Berlin','Brandenburg','Bremen','Hamburg','Hesse','Lower Saxony','Mecklenburg-Vorpommern','North Rhine-Westphalia','Rhineland-Palatinate','Saarland','Saxony','Saxony-Anhalt','Schleswig-Holstein','Thuringia'],
-  'France': ['Île-de-France','Provence-Alpes-Côte d\'Azur','Auvergne-Rhône-Alpes','Nouvelle-Aquitaine','Occitanie','Hauts-de-France','Grand Est','Pays de la Loire','Brittany','Normandy'],
-  'Australia': ['New South Wales','Victoria','Queensland','Western Australia','South Australia','Tasmania','ACT','Northern Territory'],
-  'UAE': ['Abu Dhabi','Dubai','Sharjah','Ajman','Umm Al Quwain','Ras Al Khaimah','Fujairah'],
-  'India': ['Maharashtra','Delhi','Karnataka','Tamil Nadu','Telangana','Gujarat','West Bengal','Rajasthan','Uttar Pradesh','Kerala'],
-  'Ireland': ['Dublin','Cork','Galway','Limerick','Waterford','Kilkenny'],
-  'Netherlands': ['North Holland','South Holland','Utrecht','North Brabant','Gelderland','Overijssel'],
-  'Italy': ['Lombardy','Lazio','Campania','Veneto','Piedmont','Tuscany','Emilia-Romagna','Sicily'],
-  'Spain': ['Madrid','Catalonia','Andalusia','Valencia','Basque Country','Galicia'],
-  'Saudi Arabia': ['Riyadh','Makkah','Eastern Province','Madinah','Asir','Qassim'],
-  'Kenya': ['Nairobi','Mombasa','Kisumu','Nakuru','Eldoret'],
-  'Other Country': []
-};
+// Full list of countries for the checkout dropdown. Country is required;
+// city is a plain free-text field (no state/region cascade — simpler for
+// non-tech-savvy users, and any extra delivery detail gets confirmed on
+// WhatsApp anyway).
+const ALL_COUNTRIES = [
+  'United States', 'Nigeria', 'United Kingdom', 'Canada', 'Ghana', 'South Africa', 'Germany', 'France',
+  'Australia', 'United Arab Emirates', 'India', 'Ireland', 'Netherlands', 'Italy', 'Spain', 'Saudi Arabia',
+  'Kenya', 'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Antigua and Barbuda', 'Argentina',
+  'Armenia', 'Austria', 'Azerbaijan', 'Bahamas', 'Bahrain', 'Bangladesh', 'Barbados', 'Belarus', 'Belgium',
+  'Belize', 'Benin', 'Bhutan', 'Bolivia', 'Bosnia and Herzegovina', 'Botswana', 'Brazil', 'Brunei',
+  'Bulgaria', 'Burkina Faso', 'Burundi', 'Cabo Verde', 'Cambodia', 'Cameroon', 'Central African Republic',
+  'Chad', 'Chile', 'China', 'Colombia', 'Comoros', 'Congo (DRC)', 'Congo (Republic)', 'Costa Rica',
+  'Croatia', 'Cuba', 'Cyprus', 'Czech Republic', 'Denmark', 'Djibouti', 'Dominica', 'Dominican Republic',
+  'Ecuador', 'Egypt', 'El Salvador', 'Equatorial Guinea', 'Eritrea', 'Estonia', 'Eswatini', 'Ethiopia',
+  'Fiji', 'Finland', 'Gabon', 'Gambia', 'Georgia', 'Greece', 'Grenada', 'Guatemala', 'Guinea',
+  'Guinea-Bissau', 'Guyana', 'Haiti', 'Honduras', 'Hungary', 'Iceland', 'Indonesia', 'Iran', 'Iraq',
+  'Israel', 'Jamaica', 'Japan', 'Jordan', 'Kazakhstan', 'Kiribati', 'Kuwait', 'Kyrgyzstan', 'Laos',
+  'Latvia', 'Lebanon', 'Lesotho', 'Liberia', 'Libya', 'Liechtenstein', 'Lithuania', 'Luxembourg',
+  'Madagascar', 'Malawi', 'Malaysia', 'Maldives', 'Mali', 'Malta', 'Marshall Islands', 'Mauritania',
+  'Mauritius', 'Mexico', 'Micronesia', 'Moldova', 'Monaco', 'Mongolia', 'Montenegro', 'Morocco',
+  'Mozambique', 'Myanmar', 'Namibia', 'Nauru', 'Nepal', 'New Zealand', 'Nicaragua', 'Niger', 'North Korea',
+  'North Macedonia', 'Norway', 'Oman', 'Pakistan', 'Palau', 'Palestine', 'Panama', 'Papua New Guinea',
+  'Paraguay', 'Peru', 'Philippines', 'Poland', 'Portugal', 'Qatar', 'Romania', 'Russia', 'Rwanda',
+  'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines', 'Samoa', 'San Marino',
+  'Sao Tome and Principe', 'Senegal', 'Serbia', 'Seychelles', 'Sierra Leone', 'Singapore', 'Slovakia',
+  'Slovenia', 'Solomon Islands', 'Somalia', 'South Korea', 'South Sudan', 'Sri Lanka', 'Sudan', 'Suriname',
+  'Sweden', 'Switzerland', 'Syria', 'Taiwan', 'Tajikistan', 'Tanzania', 'Thailand', 'Timor-Leste', 'Togo',
+  'Tonga', 'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan', 'Tuvalu', 'Uganda', 'Ukraine',
+  'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City', 'Venezuela', 'Vietnam', 'Yemen', 'Zambia', 'Zimbabwe'
+];
 
 function showCheckoutForm() {
   const overlay = document.getElementById('checkoutOverlay');
   const countrySelect = document.getElementById('checkoutCountry');
-  const stateSelect = document.getElementById('checkoutState');
 
   countrySelect.innerHTML = '<option value="">Select country…</option>';
-  Object.keys(LOCATION_DATA).forEach(country => {
+  ALL_COUNTRIES.forEach(country => {
     const opt = document.createElement('option');
     opt.value = country;
     opt.textContent = country;
     countrySelect.appendChild(opt);
   });
 
-  stateSelect.innerHTML = '<option value="">Select country first…</option>';
-  stateSelect.disabled = true;
   document.getElementById('checkoutCity').value = '';
+
+  // Pre-fill from the shipping-destination pill so we don't ask twice.
+  const knownCountry = getShipCountry();
+  if (ALL_COUNTRIES.includes(knownCountry)) {
+    countrySelect.value = knownCountry;
+  }
 
   overlay.classList.add('active');
   document.body.classList.add('no-scroll');
@@ -1006,8 +1075,13 @@ function hideCheckoutForm() {
 }
 
 function sendToWhatsApp() {
+  if (cart.length === 0) {
+    hideCheckoutForm();
+    hideCartModal();
+    return;
+  }
+
   const country = document.getElementById('checkoutCountry').value;
-  const state = document.getElementById('checkoutState').value;
   const city = document.getElementById('checkoutCity').value.trim();
   const agreeCheckbox = document.getElementById('checkoutAgree');
 
@@ -1022,43 +1096,54 @@ function sendToWhatsApp() {
     return;
   }
 
+  const domestic = country === DOMESTIC_COUNTRY;
+
   let message = `ORDER SUMMARY\n`;
   message += `━━━━━━━━━━━━━━━━━━━━━━\n\n`;
 
   cart.forEach((item, index) => {
     const code = getProductCode(item.product);
-    const priceVal = normalizePriceValue(item.price, item.priceValue);
-    const priceStr = item.price || `₦${priceVal.toLocaleString()}`;
     const qtyStr = item.qty > 1 ? ` ×${item.qty}` : '';
-    const lineTotal = item.qty > 1 ? ` = ₦${(priceVal * item.qty).toLocaleString()}` : '';
-    message += `${index + 1}. ${code} — ${item.product.name} — ${priceStr}${qtyStr}${lineTotal}\n`;
+    if (domestic) {
+      const priceVal = normalizePriceValue(item.price, item.priceValue);
+      const priceStr = item.price || `₦${priceVal.toLocaleString()}`;
+      const lineTotal = item.qty > 1 ? ` = ₦${(priceVal * item.qty).toLocaleString()}` : '';
+      message += `${index + 1}. ${code} — ${item.product.name} — ${priceStr}${qtyStr}${lineTotal}\n`;
+    } else {
+      message += `${index + 1}. ${code} — ${item.product.name}${qtyStr}\n`;
+    }
     if (item.variant) {
       message += `   ↳ ${item.variant.name}\n`;
     }
   });
 
   const total = cart.reduce((sum, item) => sum + (normalizePriceValue(item.price, item.priceValue) * item.qty), 0);
-  message += `\n━━━━━━━━━━━━━━━━━━━━━━\n`;
-  message += `TOTAL: ₦${total.toLocaleString()}\n\n`;
 
   let location = `📍 ${country}`;
-  if (state) location += `, ${state}`;
   if (city) location += `, ${city}`;
-  message += `${location}\n\n`;
 
-  message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
-  message += `Prices may vary by destination.\n\nWe'll confirm final pricing & delivery time.\n\n— FA Logistics`;
+  message += `\n━━━━━━━━━━━━━━━━━━━━━━\n`;
+  if (domestic) {
+    message += `TOTAL: ₦${total.toLocaleString()}\n\n`;
+    message += `${location}\n\n`;
+    message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+    message += `Prices may vary by destination.\n\nWe'll confirm final pricing & delivery time.\n\n— FA Logistics`;
+  } else {
+    message += `${location}\n\n`;
+    message += `━━━━━━━━━━━━━━━━━━━━━━\n`;
+    message += `Please send your best price & delivery estimate for the items above, shipping to ${country}${city ? `, ${city}` : ''}.\n\n— FA Logistics`;
+  }
 
   trackEvent('whatsapp_click', {
     currency: 'NGN',
     value: total,
     items: cartToAnalyticsItems(),
     checkout_country: country || 'unspecified',
-    checkout_state: state || '',
-    checkout_city: city || ''
+    checkout_city: city || '',
+    domestic_pricing: domestic
   });
 
-  window.open(`https://wa.me/${WHATSAPP_ORDER_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+  window.location.href = `https://wa.me/${WHATSAPP_ORDER_NUMBER}?text=${encodeURIComponent(message)}`;
   hideCheckoutForm();
   hideCartModal();
 }
@@ -1338,34 +1423,29 @@ document.getElementById('cartModal').addEventListener('click', (e) => {
   if (e.target.id === 'cartModal') hideCartModal();
 });
 
+// Shipping-destination pill — quiet, non-blocking, drives price visibility
+const shipCountrySelect = document.getElementById('shipCountrySelect');
+if (shipCountrySelect) {
+  ALL_COUNTRIES.forEach(country => {
+    const opt = document.createElement('option');
+    opt.value = country;
+    opt.textContent = country;
+    shipCountrySelect.appendChild(opt);
+  });
+  shipCountrySelect.value = getShipCountry();
+  shipCountrySelect.addEventListener('change', () => {
+    setShipCountry(shipCountrySelect.value);
+    refreshAllPrices();
+  });
+}
+refreshAllPrices();
+
 // Checkout form controls
 document.getElementById('checkoutFormClose').addEventListener('click', hideCheckoutForm);
 document.getElementById('checkoutCancelBtn').addEventListener('click', hideCheckoutForm);
 document.getElementById('checkoutSendBtn').addEventListener('click', sendToWhatsApp);
 document.getElementById('checkoutOverlay').addEventListener('click', (e) => {
   if (e.target.id === 'checkoutOverlay') hideCheckoutForm();
-});
-
-// Country → State cascade
-document.getElementById('checkoutCountry').addEventListener('change', function() {
-  const stateSelect = document.getElementById('checkoutState');
-  const states = LOCATION_DATA[this.value] || [];
-  if (states.length > 0) {
-    stateSelect.innerHTML = '<option value="">Select state/region…</option>';
-    states.forEach(s => {
-      const opt = document.createElement('option');
-      opt.value = s;
-      opt.textContent = s;
-      stateSelect.appendChild(opt);
-    });
-    stateSelect.disabled = false;
-  } else if (this.value === 'Other Country') {
-    stateSelect.innerHTML = '<option value="">Type city below instead</option>';
-    stateSelect.disabled = true;
-  } else {
-    stateSelect.innerHTML = '<option value="">Select country first…</option>';
-    stateSelect.disabled = true;
-  }
 });
 
 // Categories toggle
