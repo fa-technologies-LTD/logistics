@@ -104,6 +104,15 @@ function normalizePriceValue(priceStr, priceValue) {
   return parsePriceValue(priceStr || '0');
 }
 
+// Source images are uploaded at full camera resolution but only ever shown as
+// small thumbnails/cards. Route them through a free resize proxy (no
+// re-upload needed) so the browser downloads a size that actually matches
+// what's displayed, instead of a ~90KB original for a 150px card.
+function resizedImageUrl(url, width) {
+  if (!url) return url;
+  return `https://images.weserv.nl/?url=${encodeURIComponent(url)}&w=${width}&q=75&output=webp`;
+}
+
 // ── Cart Persistence ──
 try {
   const savedCart = localStorage.getItem('faLogisticsCart');
@@ -558,7 +567,7 @@ function generateCardHTML(product) {
   const deliveryBadge = product.sameDay ? `<div class="product-badge delivery">${ICONS.bolt} Same Day</div>` : '';
 
   const imageContent = product.imageUrl
-    ? `<img src="${product.imageUrl}" alt="${product.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    ? `<img src="${resizedImageUrl(product.imageUrl, 400)}" alt="${product.name}" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
        <span class="icon-fallback" style="display:none">${product.emoji}</span>`
     : `<span class="icon-fallback">${product.emoji}</span>`;
 
@@ -812,7 +821,7 @@ function renderCartItems() {
       ? `${priceStr}${item.qty > 1 ? ` × ${item.qty} = ₦${(priceVal * item.qty).toLocaleString()}` : ''}`
       : 'Price by quote';
     const thumbContent = item.product.imageUrl
-      ? `<img src="${item.product.imageUrl}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      ? `<img src="${resizedImageUrl(item.product.imageUrl, 160)}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
          <span class="icon-fallback" style="display:none">${item.product.emoji}</span>`
       : `<span class="icon-fallback">${item.product.emoji}</span>`;
     return `
@@ -904,7 +913,7 @@ function showProductDetail(productId) {
   }
 
   document.getElementById('detailImage').innerHTML = product.imageUrl
-    ? `<img src="${product.imageUrl}" alt="${product.name}" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    ? `<img src="${resizedImageUrl(product.imageUrl, 800)}" alt="${product.name}" loading="lazy" decoding="async" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
        <span class="icon-fallback" style="display:none">${product.emoji}</span>`
     : `<span class="icon-fallback">${product.emoji}</span>`;
 

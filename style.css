@@ -479,6 +479,7 @@ body.no-scroll {
 
 .testimonials-scroll {
   display: flex;
+  align-items: flex-start;
   gap: 16px;
   overflow-x: auto;
   scroll-snap-type: x mandatory;
@@ -2499,6 +2500,16 @@ body.staff-page {
    ========================================================= */
 
 @media (max-width: 768px) {
+  /* Bump tap targets closer to the ~44px touch-friendly minimum on mobile. */
+  .order-btn {
+    padding: 13px 10px;
+  }
+
+  .filter-pill {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
   .cart-item {
     grid-template-columns: 56px minmax(0, 1fr);
     grid-template-areas:
@@ -2535,9 +2546,27 @@ body.staff-page {
 }
 
 @media (max-width: 480px) {
+  .search-container {
+    gap: 6px;
+  }
+
+  .search-input {
+    padding: 12px 32px 12px 36px;
+    font-size: 13px;
+  }
+
+  .search-icon {
+    left: 12px;
+  }
+
+  .search-clear {
+    right: 8px;
+  }
+
   .ship-pill-select {
-    max-width: 76px;
+    max-width: 104px;
     font-size: 11px;
+    padding-right: 14px;
   }
 
   .cart-modal {
