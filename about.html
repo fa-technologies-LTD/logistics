@@ -210,6 +210,39 @@
       max-width: 760px;
     }
 
+    /* Floating product gallery */
+    .hero-gallery {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    .hero-gallery img {
+      position: absolute;
+      width: 168px;
+      height: 168px;
+      object-fit: cover;
+      border-radius: 22px;
+      border: 5px solid #fff;
+      box-shadow: 0 22px 48px -18px rgba(33,27,20,0.40);
+      transform: rotate(var(--rot));
+      animation: floatY 7s ease-in-out infinite;
+      animation-delay: var(--delay, 0s);
+    }
+    .hero-gallery .g1 { --rot: -6deg; --delay: 0s;   top: 7%;  left: 4%;  width: 178px; height: 178px; }
+    .hero-gallery .g2 { --rot: 5deg;  --delay: .8s;  top: 11%; right: 5%; width: 150px; height: 150px; }
+    .hero-gallery .g3 { --rot: 4deg;  --delay: 1.6s; top: 41%; left: 1.5%; width: 132px; height: 132px; }
+    .hero-gallery .g4 { --rot: -5deg; --delay: .4s;  top: 47%; right: 2%; width: 142px; height: 142px; }
+    .hero-gallery .g5 { --rot: 6deg;  --delay: 1.2s; bottom: 8%; left: 11%; width: 152px; height: 152px; }
+    .hero-gallery .g6 { --rot: -4deg; --delay: 2s;   bottom: 7%; right: 12%; width: 164px; height: 164px; }
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0) rotate(var(--rot)); }
+      50%      { transform: translateY(-12px) rotate(var(--rot)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-gallery img { animation: none; }
+    }
+
     .hero-logo {
       display: flex;
       align-items: center;
@@ -863,6 +896,13 @@
       .hero-logo img.mark { height: 40px; }
       .hero-logo img.wordmark { height: 20px; }
       .hero-logo { margin-bottom: 28px; }
+      /* Frame the mobile hero with 4 small corner images, hide the side pair */
+      .hero-gallery img { width: 84px !important; height: 84px !important; border-width: 3px; border-radius: 16px; }
+      .hero-gallery .g3, .hero-gallery .g4 { display: none; }
+      .hero-gallery .g1 { top: 2.5%; left: 3%; }
+      .hero-gallery .g2 { top: 4%; right: 3%; }
+      .hero-gallery .g5 { bottom: 3%; left: 4%; }
+      .hero-gallery .g6 { bottom: 3%; right: 4%; }
 
       /* categories */
       .categories-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
@@ -935,6 +975,16 @@
         <line class="el" x1="600" y1="0" x2="720" y2="450" stroke="#D4AF37" stroke-width="0.7"/>
         <line class="el" x1="720" y1="900" x2="720" y2="300" stroke="#D4AF37" stroke-width="0.5"/>
       </svg>
+    </div>
+
+    <!-- Floating product gallery -->
+    <div class="hero-gallery" aria-hidden="true">
+      <img class="g1" loading="lazy" src="https://images.weserv.nl/?url=i.ibb.co/RTLS2BVW/0008-18-piece-eternal-soap-rose-bouquet-jpg.jpg&w=360&h=360&fit=cover&q=78&output=webp" alt="">
+      <img class="g2" loading="lazy" src="https://images.weserv.nl/?url=i.ibb.co/3YLG9FYs/0155-happy-birthday-colorful-cake-frosting-candles-conf-png.png&w=360&h=360&fit=cover&q=78&output=webp" alt="">
+      <img class="g3" loading="lazy" src="https://images.weserv.nl/?url=i.ibb.co/Z69LchXc/0002-10-inch-plush-stuffed-teddy-bear-with-red-heart-an-jpg.jpg&w=360&h=360&fit=cover&q=78&output=webp" alt="">
+      <img class="g4" loading="lazy" src="https://images.weserv.nl/?url=i.ibb.co/tT9467gK/0077-broadway-basketeers-chocolate-gift-basket-gourmet-jpg.jpg&w=360&h=360&fit=cover&q=78&output=webp" alt="">
+      <img class="g5" loading="lazy" src="https://images.weserv.nl/?url=i.ibb.co/dTTN80k/0006-13pc-birthday-gift-basket-for-men-tumbler-toiletry-png.png&w=360&h=360&fit=cover&q=78&output=webp" alt="">
+      <img class="g6" loading="lazy" src="https://images.weserv.nl/?url=i.ibb.co/Ngmkmn4M/0010-18pcs-multi-use-soap-flower-bouquet-with-gift-box-webp.webp&w=360&h=360&fit=cover&q=78&output=webp" alt="">
     </div>
 
     <div class="hero-inner">
