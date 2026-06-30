@@ -29,7 +29,7 @@
   <meta name="twitter:description" content="Flowers, cakes, food, and curated gifts delivered locally in over 100 countries. 1,000+ gifts delivered.">
   <meta name="twitter:image" content="https://raw.githubusercontent.com/fa-technologies-LTD/logistics/master/assets/og-image.png">
 
-  <meta name="theme-color" content="#07090C">
+  <meta name="theme-color" content="#FCFAF6">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://i.ibb.co">
@@ -42,15 +42,15 @@
       --primary: #D4AF37;
       --primary-strong: #B8932B;
       --primary-dim: rgba(212, 175, 55, 0.15);
-      --bg: #07090C;
-      --bg-1: #0B0F12;
-      --bg-2: #0F141B;
-      --bg-3: #131A22;
-      --text: rgba(255,255,255,0.92);
-      --text-muted: rgba(255,255,255,0.68);
-      --text-dim: rgba(255,255,255,0.45);
-      --border: rgba(255,255,255,0.08);
-      --border-strong: rgba(255,255,255,0.14);
+      --bg: #FCFAF6;
+      --bg-1: #FFFFFF;
+      --bg-2: #F7F0E4;
+      --bg-3: #EFE6D6;
+      --text: #211B14;
+      --text-muted: #6B6157;
+      --text-dim: #938A7E;
+      --border: rgba(33,27,20,0.10);
+      --border-strong: rgba(33,27,20,0.16);
     }
 
     html { scroll-behavior: smooth; }
@@ -222,12 +222,14 @@
     .hero-logo img.mark {
       height: 52px;
       width: auto;
+      filter: brightness(0);
       animation: logoBreathe 3s ease-in-out infinite;
     }
 
     .hero-logo img.wordmark {
       height: 26px;
       width: auto;
+      filter: brightness(0);
     }
 
     @keyframes logoBreathe {
@@ -353,7 +355,7 @@
 
     .btn-ghost:hover {
       color: var(--text);
-      border-color: rgba(255,255,255,0.3);
+      border-color: rgba(33,27,20,0.28);
       transform: translateY(-2px);
     }
 
@@ -485,12 +487,12 @@
       overflow: hidden;
     }
 
-    .category-img.flowers   { background: linear-gradient(135deg, #1a0a2e 0%, #2d1a4a 40%, #1a0a2e 100%); }
-    .category-img.cakes     { background: linear-gradient(135deg, #1a0d0d 0%, #3d1a1a 40%, #1a0d0d 100%); }
-    .category-img.food      { background: linear-gradient(135deg, #0d1a0d 0%, #1a3d1a 40%, #0d1a0d 100%); }
-    .category-img.giftboxes { background: linear-gradient(135deg, #0d0d1a 0%, #1a1a3d 40%, #0d0d1a 100%); }
-    .category-img.teddy     { background: linear-gradient(135deg, #1a140d 0%, #3d2e1a 40%, #1a140d 100%); }
-    .category-img.surprise  { background: linear-gradient(135deg, #0d1a1a 0%, #1a3d3d 40%, #0d1a1a 100%); }
+    .category-img.flowers   { background: linear-gradient(135deg, #F3ECFA 0%, #E7DAF6 40%, #F3ECFA 100%); }
+    .category-img.cakes     { background: linear-gradient(135deg, #FBEAEA 0%, #F6D6D6 40%, #FBEAEA 100%); }
+    .category-img.food      { background: linear-gradient(135deg, #EAF3EA 0%, #D6EAD6 40%, #EAF3EA 100%); }
+    .category-img.giftboxes { background: linear-gradient(135deg, #EAEAF6 0%, #D8D8F2 40%, #EAEAF6 100%); }
+    .category-img.teddy     { background: linear-gradient(135deg, #F6EEE2 0%, #ECDCC2 40%, #F6EEE2 100%); }
+    .category-img.surprise  { background: linear-gradient(135deg, #E6F3F3 0%, #CFEAEA 40%, #E6F3F3 100%); }
 
     .category-img-inner {
       display: flex;
@@ -510,7 +512,7 @@
 
     .category-count {
       font-size: 0.72rem;
-      color: rgba(255,255,255,0.45);
+      color: #938A7E;
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
@@ -940,12 +942,6 @@
       <div class="hero-logo">
         <img src="assets/fa-mark-white-transparent.png" alt="FA" class="mark">
         <img src="assets/fa-logistics-text-white-transparent.png" alt="FA Logistics" class="wordmark">
-      </div>
-
-      <!-- Eyebrow badge -->
-      <div class="hero-eyebrow">
-        <span class="eyebrow-dot"></span>
-        Delivering in 100+ Countries
       </div>
 
       <!-- Headline -->
