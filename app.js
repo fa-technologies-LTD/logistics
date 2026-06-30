@@ -969,6 +969,30 @@ function hideDetailModal() {
   history.replaceState(null, '', url);
 }
 
+// Share a product via the /p/<ID>/ preview page (those static pages carry
+// per-product link-preview tags so WhatsApp/iMessage show the right image &
+// name; they forward real visitors straight into the product view).
+function shareProduct() {
+  const modal = document.getElementById('detailModal');
+  const product = allProducts.find(p => p.id === parseInt(modal.dataset.productId));
+  if (!product || !product.productId) return;
+  const url = `https://gifting.fastaccs.com/p/${product.productId}/`;
+  if (navigator.share) {
+    navigator.share({ title: product.name, url }).catch(() => {});
+    return;
+  }
+  const btn = document.getElementById('detailShareBtn');
+  const done = () => {
+    if (!btn) return;
+    const orig = btn.textContent;
+    btn.textContent = 'Link copied!';
+    setTimeout(() => { btn.textContent = orig; }, 1600);
+  };
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(done).catch(() => {});
+  }
+}
+
 function checkProductUrlParam() {
   const params = new URLSearchParams(window.location.search);
   const prodCode = params.get('product');
@@ -1594,6 +1618,7 @@ document.getElementById('backToTop').addEventListener('click', () => {
 document.getElementById('detailModalClose').addEventListener('click', hideDetailModal);
 document.getElementById('detailCloseBtn').addEventListener('click', hideDetailModal);
 document.getElementById('detailAddBtn').addEventListener('click', addToCartFromDetail);
+document.getElementById('detailShareBtn').addEventListener('click', shareProduct);
 document.getElementById('detailModal').addEventListener('click', (e) => {
   if (e.target.id === 'detailModal') hideDetailModal();
 });

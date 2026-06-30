@@ -1997,6 +1997,16 @@ html {
   opacity: 0.9;
 }
 
+.detail-share-btn {
+  background: var(--surface-2);
+  color: var(--primary-strong);
+  border: 1px solid var(--border) !important;
+}
+
+.detail-share-btn:hover {
+  background: var(--surface-3);
+}
+
 .detail-close-btn {
   background: var(--bg);
   color: var(--text-dim);
