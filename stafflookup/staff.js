@@ -1,6 +1,6 @@
 'use strict';
 
-const STORE_URL = 'https://fastaccs.com/logistics/';
+const STORE_URL = 'https://gifting.fastaccs.com/';
 const RESULTS_LIMIT = 60;
 const EM_DASH = '\u2014';
 
