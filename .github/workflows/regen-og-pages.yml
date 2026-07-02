@@ -1,0 +1,41 @@
+name: Regenerate product preview pages
+
+# When products.json (or the generator) changes, rebuild the per-product
+# /p/<ID>/ link-preview pages so WhatsApp/social previews stay in sync — no need
+# to run the script by hand. The bot commit only touches p/, which is NOT in the
+# paths filter below, so it can't retrigger itself.
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'products.json'
+      - 'scripts/gen-og-pages.py'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: regen-og-pages
+  cancel-in-progress: true
+
+jobs:
+  regen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Generate preview pages
+        run: python3 scripts/gen-og-pages.py
+      - name: Commit regenerated pages (if any changed)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add p/
+          if git diff --cached --quiet; then
+            echo "No preview changes."
+          else
+            git commit -m "chore: regenerate product preview pages [skip ci]"
+            git push
+          fi
